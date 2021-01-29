@@ -15,10 +15,10 @@ sentences_twitter <- unlist(strsplit(gsub("\\.+$", "", clear_twitter), vyraz3, p
 sentences_news <- unlist(strsplit(gsub("\\.$", "", clear_news), vyraz3, perl = TRUE))
 sentences_blogs <- unlist(strsplit(gsub("\\.$", "", clear_blogs), vyraz3, perl = TRUE))
 
-vyraz4 <- c("((?<=[[:alpha:]])(?=['’](s|d|m) ))|((?<=[[:alpha:]])(?=['’](re|ll|ve) ))|((?<=s)(?=['’] ))| +")
-split_text_twitter <- strsplit(sentences_twitter, vyraz4, perl = TRUE)
-split_text_news <- strsplit(sentences_news, vyraz4, perl = TRUE)
-split_text_blogs <- strsplit(sentences_blogs, vyraz4, perl = TRUE)
+vyraz4 <- c("((?<=[[:alpha:]])(?='(s|d|m) ))|((?<=[[:alpha:]])(?='(re|ll|ve) ))|((?<=s)(?=' ))| +")
+split_text_twitter <- strsplit(gsub("’", "'", sentences_twitter), vyraz4, perl = TRUE)
+split_text_news <- strsplit(gsub("’", "'", sentences_news), vyraz4, perl = TRUE)
+split_text_blogs <- strsplit(gsub("’", "'", sentences_blogs), vyraz4, perl = TRUE)
 
 filterEmptyStrings <-  function(x){x[x != "" & !grepl("\\.+", x)]}
 

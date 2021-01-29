@@ -60,7 +60,7 @@ for (i in 2:length(sorted_slova$FreqPercent)){
 sorted_slova$SumFrequence <- sum_columns
 
 ggplot(data = sorted_slova, aes(x = number, y = SumFrequence, group = 1)) +
-  geom_line(lwd = 0.5) +xlim(0, NA) + ylim(0, 100) + labs(title = "Slova seřazená podle výskytu od nejvyššího, na grafu je součet výskytu tohoto a všech předešlých slov",
+  geom_line(lwd = 0.5) +xlim(0, NA) + ylim(0, 100.001) + labs(title = "Slova seřazená podle výskytu od nejvyššího, na grafu je součet výskytu tohoto a všech předešlých slov",
                                                           y = "Součet výskytu tohoto a všech předešlých slov [%]",
                                                           x = "Pořadí slova")
 
