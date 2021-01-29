@@ -15,15 +15,12 @@ sentences_twitter <- unlist(strsplit(gsub("\\.+$", "", clear_twitter), vyraz3, p
 sentences_news <- unlist(strsplit(gsub("\\.$", "", clear_news), vyraz3, perl = TRUE))
 sentences_blogs <- unlist(strsplit(gsub("\\.$", "", clear_blogs), vyraz3, perl = TRUE))
 
-vyraz4 <- c(" +")
-split_text_twitter <- strsplit(sentences_twitter, vyraz4)
-split_text_news <- strsplit(sentences_news, vyraz4)
-split_text_blogs <- strsplit(sentences_blogs, vyraz4)
+vyraz4 <- c("((?<=[[:alpha:]])(?=['’](s|d|m) ))|((?<=[[:alpha:]])(?=['’](re|ll|ve) ))|((?<=s)(?=['’] ))| +")
+split_text_twitter <- strsplit(sentences_twitter, vyraz4, perl = TRUE)
+split_text_news <- strsplit(sentences_news, vyraz4, perl = TRUE)
+split_text_blogs <- strsplit(sentences_blogs, vyraz4, perl = TRUE)
 
 filterEmptyStrings <-  function(x){x[x != "" & !grepl("\\.+", x)]}
-vyraz_apostrophes = c("((?<=[[:alpha:]])['’](?=((s|re|ll|d|ve|m)$)))|((?<=s)['’]$)")
-splitApostrophes <- function(x){strsplit(gsub(vyraz_apostrophes, " '", x, perl = TRUE), " (?=')", perl = TRUE)}
-lapplySplitApostrophes <- function(x){unlist(lapply(x, splitApostrophes))}
 
 result_twitter <- lapply(split_text_twitter, filterEmptyStrings)
 result_twitter <- result_twitter[lapply(result_twitter, length) > 1]
@@ -34,6 +31,5 @@ result_news <- result_news[lapply(result_news, length) > 1]
 result_blogs <- lapply(split_text_blogs, filterEmptyStrings)
 result_blogs <- result_blogs[lapply(result_blogs, length) > 1]
 
-resultsNoApostrophes_test <- append(append(result_twitter, result_news), result_blogs)
+results_test <- append(append(result_twitter, result_news), result_blogs)
 
-results_test <- lapply(resultsNoApostrophes_test, lapplySplitApostrophes)
