@@ -16,7 +16,6 @@ x <- tokens(result_tokeny, what = "character")
 
 bigramy <- textstat_collocations(x, min_count = 5, size = 2)
 
-
 app_table <- data.frame(bigramy$collocation, bigramy$count)
 names(app_table)[1:2] <- c("Bigram", "Freq")
 
@@ -31,6 +30,4 @@ tables <- lapply(unique_slova, function(x){app_table %>% filter(PrvniSlovo == x)
 
 app_hashed <- hash(unique_slova, tables)
 
-n <- "a"
 
-summary(app_hashed[[n]])

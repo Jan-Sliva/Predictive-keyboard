@@ -8,8 +8,8 @@ ui <- fluidPage(
 )
 
 server <- function(input, output){
-  table <- reactive(app_hashed[[str_extract(input$vstup, regex("[[:alpha:]'<>-]+(?= *?$)"))]])
-  output$vystup <- reactive(table()$DruheSlovo)
+  table <- reactive(app_bigramy[PrvniSlovo == str_extract(input$vstup, regex("[[:alpha:][:punct:]<>]+(?= *?$)"))])
+  output$vystup <- reactive(str_c(table()$DruheSlovo, collapse = ", "))
   output$plot <- renderPlot({ggplot(table(), aes(x = reorder(DruheSlovo, -Freq), y = Freq)) + 
       geom_point() + labs(title = "Frekvence bigramů zakončených daným slovem",
                           x = "Slovo",
@@ -19,4 +19,5 @@ server <- function(input, output){
 }
 
 shinyApp(ui = ui, server = server)
+
 
