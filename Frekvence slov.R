@@ -1,4 +1,5 @@
 library(ggplot2)
+library(hash)
 
 # tento skript udělá grafy týkající se frekvence slov
 # vypíše seznam všech slov, které by se měly vyměnit za token podle nastavené hranice (viz níže)
@@ -65,5 +66,7 @@ ggplot(data = sorted_slova, aes(x = number, y = SumFrequence, group = 1)) +
                                                           x = "Pořadí slova")
 
 # hranice frekvence slova, pod kterou budu nahrazovat všechny slova za token
-hranice = 3
-potreba_zmenit_za_token = filter(sorted_slova, Freq <= hranice)$unlisted_result
+hranice <-  3
+potreba_zmenit_za_token <-  dplyr::filter(sorted_slova, Freq <= hranice)$unlisted_result
+potreba_zmenit_za_token <- as.character(levels(potreba_zmenit_za_token))[potreba_zmenit_za_token]
+hashed_character <- hash(potreba_zmenit_za_token, NA)
