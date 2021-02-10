@@ -1,3 +1,5 @@
+# toto je jenom ukázka shiny app
+
 library(shiny)
 
 ui <- fluidPage(

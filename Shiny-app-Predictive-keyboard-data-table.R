@@ -1,5 +1,6 @@
 library(shiny)
 library(stringr)
+library(ggplot2)
 
 ui <- fluidPage(
   textInput("vstup", "Predictive keyboard"),
