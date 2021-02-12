@@ -13,4 +13,4 @@ Důležité jsou skripty: Main.R, Shiny-app-Predictive-keyboard-data-table.R a F
 
 Ostatní skripty jsou jen části Main.R nebo starší verze některých ze skriptů nebo nepotřebné skripty
 
-Zatím jsem okomentoval Main.R a Shiny-app-Predictive-keyboard-data-table.R
+Okomentoval jsem Main.R, Shiny-app-Predictive-keyboard-data-table.R a Frekvence slov.R
