@@ -19,7 +19,7 @@ server <- function(input, output){
   
   # extrahuji záznamy z tabulky, kde První slove odpovídá poslednímu slovu ve vstupu
   
-  table <- reactive(app_bigramy[PrvniSlovo == str_extract(input$vstup, regex("[[:alpha:][:punct:]<>]+(?= *?$)"))])
+  table <- reactive(app_bigramy[app_bigramy$PrvniSlovo == str_extract(input$vstup, regex("[[:alpha:][:punct:]<>]+(?= *?$)"))])
   
   # udělám výstup, tak, že vezmu z table všechny druhá slova a oddělím je čárkou (nemusím je seřazovat, už jsem je seřadil na konci Main.R)
   
