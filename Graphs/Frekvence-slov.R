@@ -1,37 +1,5 @@
 library(ggplot2) # grafy
 
-ReplaceWithToken <- function(splittedSentences, minFrequency, token = "<>"){
-  
-  frekvence_slov <- as.data.frame(table(splittedSentences))
-  
-  # udělám tabulku se seřazenými výskyty slova
-  
-  sorted_slova <- frekvence_slov[order(frekvence_slov$Freq, decreasing = TRUE),]
-  
-  # Teď udělám Hešovaný list, kde budou slova, která změním za token (žolíka, který bude nahrazovat slova s malým výskytem)
-  # jako token budu používat "<>"
-  
-  potreba_zmenit_za_token <-  dplyr::filter(sorted_slova, Freq <= hranice)$unlisted_result
-  potreba_zmenit_za_token <- as.character(levels(potreba_zmenit_za_token))[potreba_zmenit_za_token]
-  hashed_character <- hash(potreba_zmenit_za_token, NA) # toto jsou slova, která chci nahradit za token
-  
-  # tato funkce vezme list a nahradí slova, která jsou zároveň i v hashed_character za token
-  
-  zmenitNaToken <- function(x){
-    if (has.key(x, hashed_character))
-      return("<>")
-    else
-      return(x)
-  }
-  
-  # aktivuji tuto funkci na všechny věty
-  
-  result_tokeny <- lapply(results_test, function(x){unlist(vapply(x, zmenitNaToken, character(1)))})
-  
-  return(result_tokeny)
-  
-}
-
 
 GenerateGraphs <- function(splittedWords){
 
