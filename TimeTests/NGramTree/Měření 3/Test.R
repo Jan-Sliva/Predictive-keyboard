@@ -4,9 +4,7 @@ library(rbenchmark)
 library(dplyr)
 library(scales)
 
-fileName <- "Měření 6"
-
-source(paste0("TimeTests/NGramTree/", fileName, "/RClasses.R"))
+source("TimeTests/NGramTree/Měření 3/RClasses.R")
 
 seed <- 555
 listLength <- 100
@@ -23,10 +21,9 @@ results <- map_dfr(1:rounds, function(number){
   
   thisSeed <- listSeeds[[number]]
   
-  testList <- createListNodes(listLength, thisSeed, maxValue)
-  testS3 <- createS3Nodes(listLength, thisSeed, maxValue)
-  testS4 <- CreateS4Nodes(listLength, thisSeed, maxValue)
-  testR5 <- CreateR5Nodes(listLength, thisSeed, maxValue)
+  testList <- createListNodes(listLength, thisSeed, listLength)
+  testS3 <- createS3Nodes(listLength, thisSeed, listLength)
+  testS4 <- CreateS4Nodes(listLength, thisSeed, listLength)
   
   x <- benchmark(      "List-TopXSort" = {GetTop5List_TopXSort(testList)},
                        "List-Order" = {GetTop5List_Order(testList)},
@@ -34,8 +31,6 @@ results <- map_dfr(1:rounds, function(number){
                        "S3-Order" = {GetTop5S3_Order(testS3)},
                        "S4-TopXSort" = {GetTop5S4_TopXSort(testS4)},
                        "S4-Order" = {GetTop5S4_Order(testS4)},
-                       "R5-TopXSort" = {GetTop5R5_TopXSort(testR5)},
-                       "R5-Order" = {GetTop5R5_Order(testR5)},
                        replications = replic
   )
   
@@ -59,5 +54,5 @@ Malými tečkami jsou jednotlivá měření, velkými tečkami je jejich průmě
   scale_y_continuous(breaks = breaks_extended(10), limits = c(0, NA))
 
 
-write.csv(results, paste0("TimeTests/NGramTree/", fileName, "/Results.csv"))
-write.csv(means, paste0("TimeTests/NGramTree/", fileName, "/Means.csv"))
+write.csv(results, "TimeTests/NGramTree/Měření 3/Results.csv")
+write.csv(means, "TimeTests/NGramTree/Měření 3/Means.csv")

@@ -1,0 +1,46 @@
+---
+title: "Maximum"
+author: "Jan Slíva"
+date: "20 7 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(purrr)
+library(ggplot2)
+library(rbenchmark)
+```
+
+## Vypočítávání maxima pomocí funkcí vapply a purrr::map
+Zadefinuji si funkci GetMax pro získávání maxima.
+
+```{r GetMax}
+GetMax <- function(vec){
+  
+  maxNum <- -.Machine$integer.max
+  
+  for (num in vec){
+    if (num > maxNum) maxNum <- num
+  }
+  
+  return(maxNum)
+}
+```
+
+
+Pak zadefinuji funkce GetMaxVapply a GetMaxMap. Tyto funkce obdrží v argumentech rozdělený list na několik částí, u každé části vypočítají maximum a z těchto částečných maxim vypočítají celkové maximum. Přitom používají buď funkci vapply nebo purrr:map.
+
+```{r GetMaxMore}
+GetMaxVapply <- function(splitted){
+  res <- vapply(splitted, GetMax, c(0))
+  return(GetMax(res))
+}
+
+GetMaxMap <- function(splitted){
+  res <- map(splitted, GetMax)
+  return(GetMax(res))
+}
+```
+
+

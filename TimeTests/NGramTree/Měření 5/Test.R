@@ -4,7 +4,7 @@ library(rbenchmark)
 library(dplyr)
 library(scales)
 
-fileName <- "Měření 6"
+fileName <- "Měření 5"
 
 source(paste0("TimeTests/NGramTree/", fileName, "/RClasses.R"))
 
@@ -26,7 +26,6 @@ results <- map_dfr(1:rounds, function(number){
   testList <- createListNodes(listLength, thisSeed, maxValue)
   testS3 <- createS3Nodes(listLength, thisSeed, maxValue)
   testS4 <- CreateS4Nodes(listLength, thisSeed, maxValue)
-  testR5 <- CreateR5Nodes(listLength, thisSeed, maxValue)
   
   x <- benchmark(      "List-TopXSort" = {GetTop5List_TopXSort(testList)},
                        "List-Order" = {GetTop5List_Order(testList)},
@@ -34,8 +33,6 @@ results <- map_dfr(1:rounds, function(number){
                        "S3-Order" = {GetTop5S3_Order(testS3)},
                        "S4-TopXSort" = {GetTop5S4_TopXSort(testS4)},
                        "S4-Order" = {GetTop5S4_Order(testS4)},
-                       "R5-TopXSort" = {GetTop5R5_TopXSort(testR5)},
-                       "R5-Order" = {GetTop5R5_Order(testR5)},
                        replications = replic
   )
   

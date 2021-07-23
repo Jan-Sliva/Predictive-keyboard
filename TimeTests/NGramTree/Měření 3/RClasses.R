@@ -66,48 +66,23 @@ GetTop5S4_Order <- function(S4Nodes){
   S4Nodes[order(sapply(S4Nodes, function(x) x@freq), decreasing = TRUE)][1:5]
 }
 
-
-CreateR5Nodes <- function(count, seed, maxValue){
-  
-  set.seed(seed)
-  R5Node <- setRefClass("R5Node", fields = list(freq = "integer"))
-  
-  sapply(1:count, function(x){
-    x <- R5Node$new(freq = as.integer(floor(runif(1, 1, maxValue + 1))))
-    return(x)
-  }) 
-}
-
-GetTop5R5_TopXSort <- function(R5Nodes){
-  
-  TopXSort(R5Nodes, function(x) x$freq, 5)
-}
-
-GetTop5R5_Order <- function(R5Nodes){
-  
-  R5Nodes[order(sapply(R5Nodes, function(x) x$freq), decreasing = TRUE)][1:5]
-}
-
 TopXSort <- function(toSort, parameterFunc, x = 5){
   
   topXList <- list()
-  topXListValues <- list()
   end <- 0
   
   for (item in toSort){
     value <-  parameterFunc(item)
     
-    if ( (end < x) || (value > topXListValues[[x]]))
+    if ( (end < x) || (value > parameterFunc(topXList[[x]])))
       
       for (i in (x-1):0){
-        if( (i == 0) || ( (end >= i)  && (value <= topXListValues[[i]] ) ) ){
+        if( (i == 0) || ( (end >= i)  && (value <= parameterFunc(topXList[[i]]) ) ) ){
           if (min(x, end + 1) >= (i + 2))
             for (e in min(x, end + 1):(i + 2)) {
               topXList[[e]] <-  topXList[[e-1]]
-              topXListValues[[e]] <-  topXListValues[[e-1]]
             }
           topXList[[i+1]] <-  item
-          topXListValues[[i+1]] <- value
           if (end < x) end = end + 1
           break
         }
@@ -116,6 +91,16 @@ TopXSort <- function(toSort, parameterFunc, x = 5){
   return(topXList)
 }
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 
 
