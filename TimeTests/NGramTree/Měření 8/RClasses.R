@@ -1,4 +1,3 @@
-
 createListNodes <- function(count, seed, maxValue){
   
   set.seed(seed)

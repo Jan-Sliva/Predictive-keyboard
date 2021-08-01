@@ -4,7 +4,7 @@ library(rbenchmark)
 library(dplyr)
 library(scales)
 
-fileName <- "Měření 8"
+fileName <- "Měření 7"
 
 source(paste0("TimeTests/NGramTree/", fileName, "/RClasses.R"))
 
@@ -30,13 +30,10 @@ results <- map_dfr(1:rounds, function(number){
   
   x <- benchmark(      "List-TopXSort" = {GetTop5List_TopXSort(testList)},
                        "List-Order" = {GetTop5List_Order(testList)},
-                       "List-Rcpp-TopXSort" = {GetTop5List_TopXSortRcpp(testList)},
                        "S3-TopXSort" = {GetTop5S3_TopXSort(testS3)},
                        "S3-Order" = {GetTop5S3_Order(testS3)},
-                       "S3-Rcpp-TopXSort" = {GetTop5S3_TopXSortRcpp(testS3)},
                        "S4-TopXSort" = {GetTop5S4_TopXSort(testS4)},
                        "S4-Order" = {GetTop5S4_Order(testS4)},
-                       "S4-Rcpp-TopXSort" = {GetTop5S4_TopXSortRcpp(testS4)},
                        "R5-TopXSort" = {GetTop5R5_TopXSort(testR5)},
                        "R5-Order" = {GetTop5R5_Order(testR5)},
                        replications = replic
@@ -52,8 +49,8 @@ means <- group_by(results, test) %>%
   summarise(mean = mean(elapsed))
 
 ggplot() + 
-  geom_point(data = means, mapping = aes(x = test, y = mean, color = test), size = 3, alpha = 0.5) +
-  geom_point(data = results, mapping = aes(x = test, y = elapsed, color = test), position = position_jitter(height = 0)) +
+  geom_point(data = means %>% filter(!startsWith(test, "R5")), mapping = aes(x = test, y = mean, color = test), size = 3, alpha = 0.5) +
+  geom_point(data = results %>% filter(!startsWith(test, "R5")), mapping = aes(x = test, y = elapsed, color = test), position = position_jitter(height = 0)) +
   labs(x = "Použitá metoda", y = "Uplynulý čas [s]", 
                      color = "Použitá metoda",
                      title = "Vybírání 5 nějvětší prvků z listu a jejich reprezentace",
