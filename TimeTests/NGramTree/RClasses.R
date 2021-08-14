@@ -26,6 +26,9 @@ GetTop5List_Order <- function(listNodes){
   listNodes[order(sapply(listNodes, function(x) x$freq), decreasing = TRUE)][1:5]
 }
 
+
+
+
 createS3Nodes <- function(count, seed, maxValue){
   
   set.seed(seed)
@@ -55,6 +58,8 @@ GetTop5S3_Order <- function(S3Nodes){
 }
 
 
+
+
 CreateS4Nodes <- function(count, seed, maxValue){
   
   set.seed(seed)
@@ -82,6 +87,8 @@ GetTop5S4_Order <- function(S4Nodes){
 }
 
 
+
+
 CreateR5Nodes <- function(count, seed, maxValue){
   
   set.seed(seed)
@@ -102,6 +109,42 @@ GetTop5R5_Order <- function(R5Nodes){
   
   R5Nodes[order(sapply(R5Nodes, function(x) x$freq), decreasing = TRUE)][1:5]
 }
+
+
+
+
+CreateR6Nodes <- function(count, seed, maxValue){
+  
+  set.seed(seed)
+  R6Node <- R6Class("R6Node", public = list(
+    freq = NA,
+    initialize = function(freq) self$freq <- freq,
+    print = function(...) cat(paste0("R6Node object\nfreq: ", self$freq, "\n"))
+    ))
+  
+  lapply(1:count, function(x){
+    x <- R6Node$new(as.integer(floor(runif(1, 1, maxValue + 1))))
+    return(x)
+  }) 
+}
+
+GetTop5R6_TopXSort <- function(R6Nodes){
+  
+  TopXSort(R6Nodes, function(x) x$freq, 5)
+}
+
+GetTop5R6_TopXSortRcpp <- function(R6Nodes){
+  
+  TopXSortCppR6(R6Nodes, 5)
+}
+
+GetTop5R6_Order <- function(R6Nodes){
+  
+  R6Nodes[order(sapply(R6Nodes, function(x) x$freq), decreasing = TRUE)][1:5]
+}
+
+
+
 
 TopXSort <- function(toSort, parameterFunc, x = 5){
   

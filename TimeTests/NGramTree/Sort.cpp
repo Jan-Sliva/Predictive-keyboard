@@ -53,3 +53,9 @@ List TopXSortCppS4(List items, int count){
   
   return TopXSortCpp<S4>(items, [](S4 node)->int{ return (int) node.slot("freq");}, count);
 }
+
+// [[Rcpp::export]]
+List TopXSortCppR6(List items, int count){
+  
+  return TopXSortCpp<Environment>(items, [](Environment node)->int{ return (int) node["freq"];}, count);
+}

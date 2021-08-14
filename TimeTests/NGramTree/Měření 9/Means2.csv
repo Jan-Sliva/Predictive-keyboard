@@ -1,0 +1,5 @@
+"","test","mean"
+"1","List-Rcpp-TopXSort",0.0286000000007334
+"2","R6-Rcpp-TopXSort",0.0331000000004133
+"3","S3-Rcpp-TopXSort",0.02870000000039
+"4","S4-Rcpp-TopXSort",0.0243000000002212
