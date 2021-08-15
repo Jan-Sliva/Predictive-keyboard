@@ -2,8 +2,6 @@ library(shiny)
 library(shinyjs)
 library(stringr)
 
-source("E:/honzi/Documents/Documents/R/Predictive-keyboard/NGramsTree/NGramTree.R")
-
 predictedWords <- 10
 
 maxNGram <- 5

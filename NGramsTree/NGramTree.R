@@ -236,7 +236,7 @@ GetByNothing <- function(root){
   
   toSort <- root@children[root@Highest]
   
-  return(sapply(SortNGramTree(toSort, root@maxResult), function(x) x@name))
+  return(sapply(unname(toSort), function(x) x@name))
 }
 
 ChangeToJokers <- function(root, wordsToChange){

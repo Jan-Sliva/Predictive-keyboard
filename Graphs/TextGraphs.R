@@ -65,7 +65,7 @@ TextGraph3 <- function(data_freq, all_words_count, unique_words_count){
   return(ret)
 }
 
-TextGraph4 <- function(data_freq, all_words_count, unique_words_count){
+TextGraph4 <- function(data_freq, unique_words_count){
   
   freq_freq = as.data.frame(table(data_freq$frequency))
   

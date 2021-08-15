@@ -1,0 +1,7 @@
+1.5 MB
+All words: 28 892
+Words after filtering: 5 636
+
+15 MB
+All words: 107 276
+Words after filtering: 21 790
