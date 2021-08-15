@@ -65,4 +65,39 @@ TextGraph3 <- function(data_freq, all_words_count, unique_words_count){
   return(ret)
 }
 
-
+TextGraph4 <- function(data_freq, all_words_count, unique_words_count){
+  
+  freq_freq = as.data.frame(table(data_freq$frequency))
+  
+  names(freq_freq) <- c("freq", "freqOfFreq")
+  
+  freq_freq$freq <- as.numeric(levels(freq_freq$freq))[freq_freq$freq]
+  
+  freq_freq$freqPercent = freq_freq$freqOfFreq / unique_words_count * 100
+  
+  sum_freq_freq <- freq_freq$freqPercent[1]
+  
+  for (i in 2:length(freq_freq$freqPercent)){
+    x <- sum_freq_freq[i-1] + freq_freq$freqPercent[i]
+    sum_freq_freq <- append(sum_freq_freq, x)
+  }
+  
+  freq_freq$sumFreq <- sum_freq_freq
+  
+  ret <-  list()
+  
+  ret[[1]] <- ggplot(data = freq_freq, aes(x = freq, y = sumFreq, group = 1)) +
+    geom_line() + geom_point() + labs(title = "Frekvence slov seřazená od nejnižší",
+                                      subtitle = "Na grafu je součet kolik procent slov má  danou nebo nižší frekvenci",
+                                      x = "Frekvence slov", y = "Kolik procent slov má danou frekvenci[%]") +
+    xlim(1, NA) + scale_y_continuous(breaks = seq(0, 100, 20), minor_breaks = seq(10, 90, 20), limits = c(0, NA))
+  
+  ret[[2]] <- ggplot(data = freq_freq, aes(x = freq, y = sumFreq, group = 1)) +
+    geom_line() + geom_point() + labs(title = "Frekvence slov seřazená od nejnižší",
+                                      subtitle = "Na grafu je součet kolik procent slov má  danou nebo nižší frekvenci - pro hodnoty frekvence slov 1 - 30",
+                                      x = "Frekvence slov", y = "Kolik procent slov má danou frekvenci[%]") +
+    scale_x_continuous(breaks = 1:30, minor_breaks = NULL, limits = c(1, 30)) + 
+    scale_y_continuous(breaks = seq(0, 100, 20), minor_breaks = seq(10, 90, 20), limits = c(0, NA))
+  
+  return(ret)
+}

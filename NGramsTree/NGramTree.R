@@ -1,18 +1,19 @@
-
 library(triebeard)
+library(Rcpp)
+Rcpp::sourceCpp("E:/honzi/Documents/Documents/R/Predictive-keyboard/NGramsTree/Sort.cpp")
 
 setClass("NGramBase", slots = list(children = "list", trie = "externalptr", Highest = "integer"))
 
 setClass("NGramNode", slots = list(freq = "numeric", name = "character"), contains = "NGramBase")
 
-setClass("NGramRoot", slots = list(maxResult = "integer"), contains = "NGramBase")
+setClass("NGramRoot", slots = list(maxResult = "integer", joker = "character"), contains = "NGramBase")
 
 
 # Create(list ngramTables [1-gram, 2-gram, 3-gram, ...], string pathDelimeter, int maxResults)
 
-CreateNGramTree <- function(ngramTables, maxResult, pathName, pathDelimeter = " ", freqPathName = "freq"){
+CreateNGramTree <- function(ngramTables, maxResult, pathName, pathDelimeter = " ", freqPathName = "freqPercent", joker = "<>"){
   
-  root <- CreateRoot(maxResult)
+  root <- CreateRoot(maxResult, joker)
   
   for(tab in ngramTables){
     
@@ -24,16 +25,16 @@ CreateNGramTree <- function(ngramTables, maxResult, pathName, pathDelimeter = " 
     }
   }
   
-  root <- SetTrieAndHighestRecursive(root, maxResult, length(ngramTables))
+  root <- SetTrieAndHighestRecursive(root, maxResult, root@joker, length(ngramTables))
   
   return(root)
 }
 
   # CreateRoot
 
-CreateRoot <- function(maxResult){
+CreateRoot <- function(maxResult, joker){
   
-  new("NGramRoot", maxResult = as.integer(maxResult), children = list(), Highest = integer(0))
+  new("NGramRoot", maxResult = as.integer(maxResult), children = list(), Highest = integer(0), joker = joker)
 }
 
   # CreateNodes(names, freq) -> Node
@@ -83,7 +84,7 @@ FindOrCreate <- function(node, path, freq) {
 # setMethod("FindOrCreate", signature("NGramBase", "character", "integer"), FindOrCreate)
 
 
-SetTrieAndHighest <- function(node, maxResult){
+SetTrieAndHighest <- function(node, maxResult, joker){
   
   realChildren <- list()
   
@@ -96,7 +97,7 @@ SetTrieAndHighest <- function(node, maxResult){
     
     thisChildren <- node@children[[index]]
     
-    if (thisChildren@freq > 0){
+    if ((thisChildren@freq > 0) && (thisChildren@name != joker)){
       realChildren <- append(realChildren, thisChildren)
       realChildrenNames <- append(realChildrenNames, thisChildren@name)
       realChildrenIndeces <- append(realChildrenIndeces, index)
@@ -111,14 +112,14 @@ SetTrieAndHighest <- function(node, maxResult){
   
 }
 
-SetTrieAndHighestRecursive <- function(node, maxResult, depth){
+SetTrieAndHighestRecursive <- function(node, maxResult, joker, depth){
   
-  node <- SetTrieAndHighest(node, maxResult)
+  node <- SetTrieAndHighest(node, maxResult, joker)
   
   if(depth != 1){
     if(length(node@children) > 0)
     for (index in 1:length(node@children)) {
-      node@children[[index]] <- SetTrieAndHighestRecursive(node@children[[index]], maxResult, depth - 1)
+      node@children[[index]] <- SetTrieAndHighestRecursive(node@children[[index]], maxResult, joker, depth - 1)
     }
   }
   
@@ -130,6 +131,8 @@ SetTrieAndHighestRecursive <- function(node, maxResult, depth){
 GetBySeq <- function(root, lastWords){
   
   if(length(lastWords) > root@maxResult) lastWords <- lastWords[(length(lastWords) - root@maxResult + 1):length(lastWords)]
+  
+  lastWords <- ChangeToJokers(root, lastWords)
   
   results <- unlist(lapply(1:length(lastWords), function(x){
     
@@ -167,9 +170,9 @@ GetBySeq <- function(root, lastWords){
 
 GetBySeqAndPart <- function(root, lastWords, newPart){
   
-  if((!is.character(newPart)) || newPart == "") return(GetBySeq(root, lastWords))
-  
   if(length(lastWords) > root@maxResult) lastWords <- lastWords[(length(lastWords) - root@maxResult + 1):length(lastWords)]
+  
+  lastWords <- ChangeToJokers(root, lastWords)
   
   results <- unlist(lapply(1:length(lastWords), function(x){
     
@@ -200,7 +203,21 @@ GetBySeqAndPart <- function(root, lastWords, newPart){
     results[[name]] <- toReset
   }
   
-  return(sapply(SortNGramTree(results, root@maxResult), function(x) x@name))
+  ret <- sapply(SortNGramTree(results, root@maxResult), function(x) x@name)
+  
+  # if it is too short, extend it from roots trie
+  if(length(ret) < root@maxResult){
+    
+    toSort <- unlist(root@children[prefix_match(root@trie, newPart)[[1]]])
+    
+    ext <- sapply(SortNGramTree(toSort, root@maxResult), function(x) x@name)
+    
+    ret <- unique(c(ret, ext))
+    
+    if(length(ret) > root@maxResult) ret <- ret[1:root@maxResult]
+  }
+  
+  return(ret)
 }
 
 
@@ -208,9 +225,7 @@ GetBySeqAndPart <- function(root, lastWords, newPart){
 
 GetByPart <- function(root, newPart){
   
-  if((!is.character(newPart)) || newPart == "") return(GetByNothing(root))
-  
-  toSort <- root@children[prefix_match(root@trie, newPart)[[1]]]
+  toSort <- unlist(root@children[prefix_match(root@trie, newPart)[[1]]])
   
   return(sapply(SortNGramTree(toSort, root@maxResult), function(x) x@name))
 }
@@ -224,9 +239,11 @@ GetByNothing <- function(root){
   return(sapply(SortNGramTree(toSort, root@maxResult), function(x) x@name))
 }
 
+ChangeToJokers <- function(root, wordsToChange){
+  
+  return(sapply(wordsToChange, function(x) ifelse(is.na(prefix_match(root@trie, x)[[1]][1]), root@joker, x), USE.NAMES = FALSE))
+}
 
-
-# tse <- CreateNGramTree(list(data_coll_counted[[1]][1:100,], data_coll_counted[[2]][1:100,], data_coll_counted[[3]][1:100,], data_coll_counted[[4]][1:100,], data_coll_counted[[5]][1:100,]), 10, "ngram", " ", "freqPercent")
 
 
 
