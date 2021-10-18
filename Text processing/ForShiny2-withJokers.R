@@ -41,13 +41,13 @@ names(freq_freq) <- c("freq", "freqOfFreq")
 
 freq_freq$freq <- as.numeric(levels(freq_freq$freq))[freq_freq$freq]
 
-freq_freq$freqPercent = freq_freq$freqOfFreq / data_uniqueCounts_all * 100
+freq_freq$prop = freq_freq$freqOfFreq / data_uniqueCounts_all * 100
 
-sum_freq_freq <- freq_freq$freqPercent[1]
+sum_freq_freq <- freq_freq$prop[1]
 lastdiff <- freq_percent_limit
 
-for (i in 2:length(freq_freq$freqPercent)){
-  sum_freq_freq <- sum_freq_freq + freq_freq$freqPercent[i]
+for (i in 2:length(freq_freq$prop)){
+  sum_freq_freq <- sum_freq_freq + freq_freq$prop[i]
   if(sum_freq_freq >= freq_percent_limit){
     if(sum_freq_freq - freq_percent_limit <= lastdiff) freq_limit <- freq_freq$freq[i]
     else freq_limit <- freq_freq$freq[i-1]
@@ -73,7 +73,7 @@ data_uniqueCounts <- ncol(words_dfm)
   
 data_counts <- sum(ntoken(filtered_words))
 
-words_freq$freqPercent <- words_freq$frequency / data_counts
+words_freq$prop <- words_freq$frequency / data_counts
 
 words_freq$order <- 1:length(words_freq$feature)
 
@@ -82,7 +82,7 @@ data_coll <- list()
 data_coll[[1]] <- data.frame(order = words_freq$order,
                              ngram = words_freq$feature,
                              freq = words_freq$frequency,
-                             freqPercent = words_freq$freqPercent
+                             prop = words_freq$prop
 )
 
 # counting collocations -----------------------------------------------------------------------
@@ -96,10 +96,10 @@ data_coll[2:5] <-  mapply(function(x, minCount){
   x_gram <- textstat_collocations(filtered_words, size = x, min_count = minCount)
   if(nrow(x_gram) > 0){
     ret = data.frame(order = 1:nrow(x_gram), ngram = x_gram$collocation,
-                     freq = x_gram$count, freqPercent = NA)
+                     freq = x_gram$count, prop = NA)
   }else{
     ret = data.frame(order = c(), ngram = c(),
-                     freq = c(), freqPercent = c())
+                     freq = c(), prop = c())
   }
   return(ret)
   
@@ -112,14 +112,14 @@ for (x in 1:4){
     prefix = paste0(data_coll[[x]][index,]$ngram, " ")
     thisFreq = data_coll[[x]][index,]$freq
     
-    data_coll[[x + 1]] <- data_coll[[x + 1]] %>% mutate(freqPercent = 
+    data_coll[[x + 1]] <- data_coll[[x + 1]] %>% mutate(prop = 
                                                           ifelse(
                                                             startsWith(ngram, prefix), 
                                                             freq / thisFreq, 
-                                                            freqPercent))
+                                                            prop))
   }
 }
 
 # making data tree -------------------------------------------------------------------------------
-data_tree <- CreateNGramTree(data_coll, 10, "ngram", " ", "freqPercent", joker)
+data_tree <- CreateNGramTree(data_coll, 10, "ngram", " ", "prop", joker)
 
