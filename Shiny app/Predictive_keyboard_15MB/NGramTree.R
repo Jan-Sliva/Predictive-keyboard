@@ -1,6 +1,6 @@
 library(triebeard)
 library(Rcpp)
-Rcpp::sourceCpp("E:/honzi/Documents/Documents/R/Predictive-keyboard/NGramsTree/Sort.cpp")
+Rcpp::sourceCpp("Sort.cpp")
 
 setClass("NGramBase", slots = list(children = "list", trie = "externalptr", Highest = "integer"))
 

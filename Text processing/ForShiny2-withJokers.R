@@ -12,9 +12,9 @@ freq_percent_limit <- 80
 joker <- "<>"
 
 # reading text file ----------------------------------------------------------------------------
-raw_text_twitter <- tolower(read_lines("E:/honzi/Documents/final/en_US/test2_twitter.txt"))
-raw_text_news <- tolower(read_lines("E:/honzi/Documents/final/en_US/test2_news.txt"))
-raw_text_blogs <- tolower(read_lines("E:/honzi/Documents/final/en_US/test2_blogs.txt"))
+raw_text_twitter <- tolower(read_lines("E:/honzi/Documents/final/en_US/test_twitter.txt"))
+raw_text_news <- tolower(read_lines("E:/honzi/Documents/final/en_US/test_news.txt"))
+raw_text_blogs <- tolower(read_lines("E:/honzi/Documents/final/en_US/test_blogs.txt"))
 
 raw_text <- append(append(raw_text_twitter, raw_text_news), raw_text_blogs)
 
@@ -103,7 +103,7 @@ data_coll[2:5] <-  mapply(function(x, minCount){
   }
   return(ret)
   
-}, x = 2:5, minCount = rep(8, 4), SIMPLIFY = FALSE)
+}, x = 2:5, minCount = rep(2, 4), SIMPLIFY = FALSE)
 
  # counting conditional frequency of n-grams ------------------------------------------------------
 
