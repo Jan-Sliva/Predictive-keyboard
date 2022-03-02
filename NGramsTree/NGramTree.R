@@ -1,6 +1,6 @@
 library(triebeard)
 library(Rcpp)
-Rcpp::sourceCpp("E:/honzi/Documents/Documents/R/Predictive-keyboard/NGramsTree/Sort.cpp")
+Rcpp::sourceCpp("E:/honzi/Documents/R/Predictive-keyboard/NGramsTree/Sort.cpp")
 
 setClass("NGramBase", slots = list(children = "list", trie = "externalptr", Highest = "integer"))
 
@@ -292,7 +292,7 @@ CreateMeta <- function(root, levs){
     
     
   
-  data_ret[[1]][1,] <- c(root@maxResult, root@joker, 1, length(root@children), length(root@trie))
+  data_ret[[1]][1,] <- c(root@maxResult, root@joker, 1, length(root@children), 0)
   
   pointers[1] = pointers[1] + 1
   
@@ -307,9 +307,11 @@ CreateMeta <- function(root, levs){
     pointers <- ret[[2]]
   }
   
-  for (index in get_values(root@trie)){
+  for (key in get_keys(root@trie)){
     
-    if (!mask[index]){
+    index <- longest_match(root@trie, key)
+     
+    if ((!mask[index]) && (!startsWith(key, noRecomendPrefix))){
       
       mask[index] <- TRUE
       
@@ -318,6 +320,8 @@ CreateMeta <- function(root, levs){
       pointers <- ret[[2]]
     }
   }
+  
+  data_ret[[1]][1,5] <- sum(mask)
   
   for (index in 1:length(root@children)){
     
@@ -345,7 +349,7 @@ WriteMeToMeta <- function(obj, lvl, data_ret, pointers, maxRes, maxlvl){
     return(list(data_ret, pointers))
   }
   
-  data_ret[[lvl]][pointers[lvl],] <- c(obj@name, obj@freq, pointers[lvl + 1], length(obj@children), length(obj@trie))
+  data_ret[[lvl]][pointers[lvl],] <- c(obj@name, obj@freq, pointers[lvl + 1], length(obj@children), 0)
   
   pointers[lvl] = pointers[lvl] + 1
   
@@ -360,9 +364,11 @@ WriteMeToMeta <- function(obj, lvl, data_ret, pointers, maxRes, maxlvl){
     pointers <- ret[[2]]
   }
   
-  for (index in get_values(obj@trie)){
+  for (key in get_keys(obj@trie)){
     
-    if (!mask[index]){
+    index <- longest_match(obj@trie, key)
+    
+    if ((!mask[index]) && (!startsWith(key, noRecomendPrefix))){
       
       mask[index] <- TRUE
       
@@ -371,6 +377,8 @@ WriteMeToMeta <- function(obj, lvl, data_ret, pointers, maxRes, maxlvl){
       pointers <- ret[[2]]
     }
   }
+  
+  data_ret[[lvl]][pointers[lvl]-1, 5] <- sum(mask)
   
   if (length(obj@children) > 0)
   for (index in 1:length(obj@children)){

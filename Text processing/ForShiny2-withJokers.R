@@ -6,10 +6,11 @@ library(triebeard) # písmenkové stromy
 library(quanteda) 
 library(quanteda.textstats)
 
-source("E:/honzi/Documents/Documents/R/Predictive-keyboard/NGramsTree/NGramTree.R")
+source("E:/honzi/Documents/R/Predictive-keyboard/NGramsTree/NGramTree.R")
 
 freq_percent_limit <- 80
 joker <- "<>"
+nGramLimit <- 8
 
 # reading text file ----------------------------------------------------------------------------
 raw_text_twitter <- tolower(read_lines("E:/honzi/Documents/final/en_US/test_twitter.txt"))
@@ -103,7 +104,7 @@ data_coll[2:5] <-  mapply(function(x, minCount){
   }
   return(ret)
   
-}, x = 2:5, minCount = rep(2, 4), SIMPLIFY = FALSE)
+}, x = 2:5, minCount = rep(nGramLimit, 4), SIMPLIFY = FALSE)
 
  # counting conditional frequency of n-grams ------------------------------------------------------
 

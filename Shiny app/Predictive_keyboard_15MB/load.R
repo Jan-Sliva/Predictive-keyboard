@@ -7,4 +7,3 @@ data_meta <- lapply(1:6, function(x){
 
 
 data_tree <- LoadFromMeta(data_meta, 5)
-
