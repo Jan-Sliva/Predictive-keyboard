@@ -3,8 +3,8 @@ library(stringr) # zpracování textu
 library(dplyr) # zpracování tabulky
 library(triebeard) # písmenkové stromy
 # analýza počtu bigramů
-library(quanteda) 
 library(quanteda.textstats)
+library(quanteda)
 
 source("E:/honzi/Documents/R/Predictive-keyboard/NGramsTree/NGramTree.R")
 
@@ -13,11 +13,7 @@ joker <- "<>"
 nGramLimit <- 8
 
 # reading text file ----------------------------------------------------------------------------
-raw_text_twitter <- tolower(read_lines("E:/honzi/Documents/final/en_US/test_twitter.txt"))
-raw_text_news <- tolower(read_lines("E:/honzi/Documents/final/en_US/test_news.txt"))
-raw_text_blogs <- tolower(read_lines("E:/honzi/Documents/final/en_US/test_blogs.txt"))
-
-raw_text <- append(append(raw_text_twitter, raw_text_news), raw_text_blogs)
+raw_text <- tolower(read_lines("E:/honzi/Corpora/CZ/final.txt"))
 
 # making tokens object -------------------------------------------------------------------------
 raw_words <- tokens(raw_text, what = "word", remove_symbols = TRUE, 

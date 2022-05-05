@@ -1,6 +1,8 @@
+source("load.R")
 library(shiny)
 library(shinyjs)
 library(stringr)
+
 
 predictedWords <- 10
 
@@ -9,7 +11,7 @@ maxNGram <- 5
 
 ui <- fluidPage(
     useShinyjs(),
-    titlePanel("Predictive keyboard"),
+    titlePanel("Predictive keyboard (15 MB)"),
     textInput("textInput", NULL, placeholder = "Enter text", width = "800px"),
     
     lapply(1:predictedWords, function(x) {
