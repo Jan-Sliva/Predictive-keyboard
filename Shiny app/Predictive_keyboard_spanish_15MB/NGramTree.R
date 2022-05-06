@@ -1,6 +1,6 @@
 library(triebeard)
 library(Rcpp)
-Rcpp::sourceCpp("NGramsTree/Sort.cpp")
+Rcpp::sourceCpp("Sort.cpp")
 
 setClass("NGramBase", slots = list(children = "list", trie = "externalptr", Highest = "integer"))
 
@@ -271,130 +271,6 @@ ChangeToJokers <- function(root, wordsToChange){
   return(sapply(wordsToChange, function(x) ifelse(is.na(prefix_match(root@trie, x)[[1]][1]), 
                                                   paste0(noRecomendPrefix , root@joker), x), USE.NAMES = FALSE))
 }
-
-
-CreateMeta <- function(root, levs){
-  
-  data_ret <- list(setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("maxRes", "joker", "start", "all", "real")))
-  
-  data_ret[2:levs] <- lapply(2:levs, function(x){
-    
-    return(setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("word", "freq", "start", "all", "real")))
-  })
-  
-  data_ret[[levs+1]] <- setNames(data.frame(matrix(ncol = 2, nrow = 0)), c("word", "freq"))
-  
-  pointers <- rep(1, levs + 1)
-  
-  maxRes <- root@maxResult
-  
-  maxlvl <- levs + 1
-    
-    
-  
-  data_ret[[1]][1,] <- c(root@maxResult, root@joker, 1, length(root@children), 0)
-  
-  pointers[1] = pointers[1] + 1
-  
-  mask <- logical(length(root@children))
-  
-  for (index in root@Highest){
-    
-    mask[index] <- TRUE
-    
-    ret <- WriteMeToMeta(root@children[index][[1]], 2, data_ret, pointers, maxRes, maxlvl)
-    data_ret <- ret[[1]]
-    pointers <- ret[[2]]
-  }
-  
-  for (key in get_keys(root@trie)){
-    
-    index <- longest_match(root@trie, key)
-     
-    if ((!mask[index]) && (!startsWith(key, noRecomendPrefix))){
-      
-      mask[index] <- TRUE
-      
-      ret <- WriteMeToMeta(root@children[index][[1]], 2, data_ret, pointers, maxRes, maxlvl)
-      data_ret <- ret[[1]]
-      pointers <- ret[[2]]
-    }
-  }
-  
-  data_ret[[1]][1,5] <- sum(mask)
-  
-  for (index in 1:length(root@children)){
-    
-    if (!mask[index]){
-      
-      ret <- WriteMeToMeta(root@children[index][[1]], 2, data_ret, pointers, maxRes, maxlvl)
-      data_ret <- ret[[1]]
-      pointers <- ret[[2]]
-    }
-    
-  }
-  
-  return(data_ret)
-  
-}
-
-WriteMeToMeta <- function(obj, lvl, data_ret, pointers, maxRes, maxlvl){
-  
-  if (lvl == maxlvl){
-    
-    data_ret[[lvl]][pointers[lvl],] <- c(obj@name, obj@freq)
-    
-    pointers[lvl] = pointers[lvl] + 1
-    
-    return(list(data_ret, pointers))
-  }
-  
-  data_ret[[lvl]][pointers[lvl],] <- c(obj@name, obj@freq, pointers[lvl + 1], length(obj@children), 0)
-  
-  pointers[lvl] = pointers[lvl] + 1
-  
-  mask <- logical(length(obj@children))
-  
-  for (index in obj@Highest){
-    
-    mask[index] <- TRUE
-    
-    ret <- WriteMeToMeta(obj@children[index][[1]], lvl+1, data_ret, pointers, maxRes, maxlvl)
-    data_ret <- ret[[1]]
-    pointers <- ret[[2]]
-  }
-  
-  for (key in get_keys(obj@trie)){
-    
-    index <- longest_match(obj@trie, key)
-    
-    if ((!mask[index]) && (!startsWith(key, noRecomendPrefix))){
-      
-      mask[index] <- TRUE
-      
-      ret <- WriteMeToMeta(obj@children[index][[1]], lvl+1, data_ret, pointers, maxRes, maxlvl)
-      data_ret <- ret[[1]]
-      pointers <- ret[[2]]
-    }
-  }
-  
-  data_ret[[lvl]][pointers[lvl]-1, 5] <- sum(mask)
-  
-  if (length(obj@children) > 0)
-  for (index in 1:length(obj@children)){
-    
-    if (!mask[index]){
-      
-      ret <- WriteMeToMeta(obj@children[index][[1]], lvl+1, data_ret, pointers, maxRes, maxlvl)
-      data_ret <- ret[[1]]
-      pointers <- ret[[2]]
-    }
-    
-  }
-  
-  return(list(data_ret, pointers))
-}
-
 
 LoadFromMeta <- function(input, levs){
   
