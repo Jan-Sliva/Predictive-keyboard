@@ -2,7 +2,7 @@ source("NGramTree.R")
 
 data_meta <- lapply(1:6, function(x){
   
-  return(read.csv(paste0(x, ".csv")))
+  return(read.csv(paste0(x, ".csv"), encoding="Windows-1252"))
 })
 
 

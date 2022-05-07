@@ -5,9 +5,9 @@ account: jan-sliva
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6250403
-bundleId: 5879090
+bundleId: 5880521
 url: https://jan-sliva.shinyapps.io/Predictive_keyboard_czech_15MB/
-when: 1651866283.3691
-lastSyncTime: 1651866283.3691
+when: 1651907407.29039
+lastSyncTime: 1651907407.29039
 asMultiple: FALSE
 asStatic: FALSE
