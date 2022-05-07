@@ -11,8 +11,8 @@ maxNGram <- 5
 
 ui <- fluidPage(
     useShinyjs(),
-    titlePanel("Predictive keyboard (15 MB)"),
-    textInput("textInput", "This is an old version, new version is on https://jan-sliva.shinyapps.io/Predictive_keyboard_english_15MB/", placeholder = "Enter text", width = "800px"),
+    titlePanel("Predictive keyboard (spanish, 15 MB)"),
+    textInput("textInput", NULL, placeholder = "Enter text", width = "800px"),
     
     lapply(1:predictedWords, function(x) {
         hidden(actionButton(paste0("textButton", x), NA))

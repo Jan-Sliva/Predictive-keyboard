@@ -6,7 +6,7 @@ library(triebeard) # písmenkové stromy
 library(quanteda.textstats)
 library(quanteda)
 
-source("E:/honzi/Documents/R/Predictive-keyboard/NGramsTree/NGramTree.R")
+source("NGramsTree/NGramTree.R")
 
 freq_percent_limit <- 80
 joker <- "<>"
@@ -14,7 +14,6 @@ nGramLimit <- 8
 
 # reading text file ----------------------------------------------------------------------------
 raw_text <- tolower(read_lines("E:/honzi/Corpora/EN_US/final.txt"))
-
 # making tokens object -------------------------------------------------------------------------
 raw_words <- tokens(raw_text, what = "word", remove_symbols = TRUE, 
                     remove_numbers = TRUE, remove_punct = TRUE,

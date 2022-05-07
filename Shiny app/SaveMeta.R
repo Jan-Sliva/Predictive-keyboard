@@ -1,4 +1,4 @@
-adress <- "E:/honzi/Documents/R/Predictive-keyboard/Shiny app"
+adress <- "Shiny app/Predictive_keyboard_spanish_15MB"
 
 files <- CreateMeta(data_tree, 5)
 
