@@ -13,8 +13,7 @@ joker <- "<>"
 nGramLimit <- 8
 
 # reading text file ----------------------------------------------------------------------------
-raw_text <- tolower(read_lines("C:/Users/honzi/OneDrive/Corpora/spanish.txt"))
-
+raw_text <- tolower(read_lines("E:/honzi/Corpora/EN_US/final.txt"))
 # making tokens object -------------------------------------------------------------------------
 raw_words <- tokens(raw_text, what = "word", remove_symbols = TRUE, 
                     remove_numbers = TRUE, remove_punct = TRUE,
