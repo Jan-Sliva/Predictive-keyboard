@@ -1,8 +1,9 @@
 source("NGramTree.R")
+library(readr)
 
 data_meta <- lapply(1:6, function(x){
   
-  return(read.csv(paste0(x, ".csv")))
+  return(read_csv(paste0(x, "v2.csv")))
 })
 
 
