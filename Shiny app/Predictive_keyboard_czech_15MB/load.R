@@ -1,9 +1,9 @@
 source("NGramTree.R")
+library(readr)
 
 data_meta <- lapply(1:6, function(x){
-  
-  return(read.csv(paste0(x, ".csv"), encoding="Windows-1252"))
-})
+  return(read_csv(paste0(x, "v2.csv")))
+}
 
 
 data_tree <- LoadFromMeta(data_meta, 5)
