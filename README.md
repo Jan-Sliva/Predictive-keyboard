@@ -1,13 +1,3 @@
-# Prediktivní klávesnice
-
-Toto je repozitář k mojí seminární práce Prediktivní klávesnice. Samotná seminárka je uložena v souboru Prediktivní klávesnice.pdf a veškerý popis kódu lze najít v ní.
-
-Klávesnici si můžete vyzkoušet na https://jan-sliva.shinyapps.io/Predictive_keyboard_15MB/ (trvá asi 30 s, než se načte)
-
-Práci jsem přihlásil do SOČ (https://www.soc.cz/). Soutěžní verzi práce a prezentaci lze nalézt na https://drive.google.com/drive/folders/1Bhi8l3XWLf4DnvZfH5t64FTs_aUTQTgD
-
----
-
 # Predictive Keyboard
 
 A statistical n-gram language model that predicts the next word(s) a user is likely to type, deployed as an interactive web application. The project was submitted to the Czech national student research competition [SOČ](https://www.soc.cz/). A full write-up (in Czech) is in `Prediktivní klávesnice.pdf`.
@@ -229,3 +219,15 @@ source("Shiny app/SaveMeta.R")   # writes 1.csv–6.csv into the target app fold
 source("TimeTests/NGramTree/Test.R")
 rmarkdown::render("TimeTests/Maximum/Maximum.Rmd")
 ```
+
+---
+
+# Prediktivní klávesnice
+
+Toto je repozitář k mojí seminární práce Prediktivní klávesnice. Samotná seminárka je uložena v souboru Prediktivní klávesnice.pdf a veškerý popis kódu lze najít v ní.
+
+Klávesnici si můžete vyzkoušet na https://jan-sliva.shinyapps.io/Predictive_keyboard_15MB/ (trvá asi 30 s, než se načte)
+
+Práci jsem přihlásil do SOČ (https://www.soc.cz/). Soutěžní verzi práce a prezentaci lze nalézt na https://drive.google.com/drive/folders/1Bhi8l3XWLf4DnvZfH5t64FTs_aUTQTgD
+
+
