@@ -10,4 +10,4 @@ Práci jsem přihlásil do SOČ (https://www.soc.cz/). Soutěžní verzi práce 
 
 Goal of this project was to create a program that predicts a text that user would like to write based on a text which the user has already written.
 
-You can try the keyboard on https://jan-sliva.shinyapps.io/Predictive_keyboard_15MB/ (it takes roughly 30 s for the keyboard to load)
+You can try the keyboard on [https://jan-sliva.shinyapps.io/Predictive_keyboard_15MB/](https://jan-sliva.shinyapps.io/Predictive_keyboard_english_15MB/) (it takes roughly 1 min for the keyboard to load)
